@@ -1,0 +1,102 @@
+<html> <head><title>HOME NODE </title></head> 
+    <body>
+    <br>
+    <a href="/dashboard">DASHBOARD </a> <br>
+    <a href="/viewAdd">ADD </a> <br>
+    <form method="POST" action="/verificaLogin">
+        <input type="text" name="senha" id="senha">
+        <input type="submit" value="ENTRAR">
+    </form>
+      <br>
+      <br>
+      <br>
+
+      <style>
+          table {
+            width: 50%; /* Set the table width to 100% of the page */
+            border-collapse: collapse; /* Remove space between table cells */
+          }
+        </style>
+
+        <table>
+
+
+      <table border="1">
+          <colgroup>
+              <col> <!-- Set the width of the first column to 50% -->
+              <col  style="width: 80%;"> <!-- The second column will take the remaining width -->
+            </colgroup>
+          <tr>
+              <td>Código</td>
+              <td>Nome</td>
+          </tr>
+          <tbody id="tableBody">
+          <% for(var i=0;i<resultado.length;i++){ %>
+          <tr>
+              <td> <%= resultado[i].codigo %> </td>
+              <td><%= resultado[i].nome %></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <br>
+      <button onclick="put();" > PUT</button>
+
+   </body>
+   </html>
+
+  <script>
+    function putJson()
+    {
+      const options = 
+      {
+        method : 'PUT',
+        headers : {'content-type' : 'application/json'},
+        body : JSON.stringify({nome : '88888888'})
+      }
+      fetch('/46',options)
+      window.location.href = '/'
+    }
+
+    function put()
+    {
+        const nomeInput = document.getElementById('senha').value
+        const options = {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({nome: nomeInput})
+       };
+
+        fetch('http://localhost:4000/43', options)
+        .then(response => response.json())
+        .then(data => {
+            // Atualize dinamicamente a tabela com os dados retornados
+            updateTable(data);
+        })
+      
+       // window.location.href = '/'
+       .catch(error => console.error('Erro na requisição:', error));
+}
+
+    function updateTable(data) {
+      // Aqui, você deve manipular a tabela HTML para refletir as alterações
+      // Pode ser necessário ajustar conforme a estrutura da sua tabela
+      const tableBody = document.getElementById('tableBody');
+
+      console.log('data: '+data[1].nome)
+
+      // Limpa a tabela
+      tableBody.innerHTML = '';
+
+      // Preenche a tabela com os novos dados
+      data.forEach(item => {
+          const row = tableBody.insertRow();
+          const cell1 = row.insertCell(0);
+          const cell2 = row.insertCell(1);
+
+          cell1.textContent = item.codigo;
+          cell2.textContent = item.nome;
+      });
+  }
+
+  </script>
